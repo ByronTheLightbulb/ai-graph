@@ -50,6 +50,7 @@ A mediator agent $A_{ij}$ is an agent that manages the relationship between two 
 
 A set of api's tools adhering to the MCP protocol 
 
-![image](https://github.com/user-attachments/assets/f000892f-54a6-4b51-b997-9b51303f3391)
+![image](https://github.com/user-attachments/assets/3c967376-7ee6-44aa-a138-14f49371c16a)
+
 
 
