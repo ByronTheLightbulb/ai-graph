@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/a86857d6-501b-414d-93dc-6b1c2c3ad243)AI GRAPH
+
 # Principle of atomicity
 
 A task is defined as such if it can not be further subdivided to smaller tasks 
@@ -30,13 +30,13 @@ An atomic task  $t_{i}$  is a task that can be performed by an agent , using the
 An atomic agent $A_{t_{i}}$ is an agent that performs an atomic task $t_{i}$ using the tools contained in the tool pool . 
 
 ### Input of an agent 
-$Inp(A_{{t_i}})$ :  Is the set of all the diffrent flows of information that the agent recieceves from tools or other agents 
+$Inp(A_{{t_i}})$ :  Is the set of all the diffrent flows of information that the agent receiceves from tools or other agents .
 ### Output of an agent 
-$Out(A_{{t_i}})$ :  Is the set of all the diffrent flows of information that the agent produces , each directed to a certain tool or agent  
+$Out(A_{{t_i}})$ :  Is the set of all the diffrent flows of information that the agent produces , each directed to a certain tool or agent  .
 
 ### Codependence 
 
-If for atomic agents $A_{{t_{i}}}$ and $A_{{t_j}}$ , $Inp(A_{t_{j}}) \cap out(A_{t_{i}}) \neq \emptyset$  then they are called codependent
+If for atomic agents $A_{{t_{i}}}$ and $A_{{t_j}}$  $Inp(A_{t_{j}}) \cap out(A_{t_{i}}) \neq \emptyset$  then they are called codependent.
 
 ## Mediator Agent : $A_{ij}$
 
