@@ -1,4 +1,4 @@
-AI GRAPH
+![image](https://github.com/user-attachments/assets/a86857d6-501b-414d-93dc-6b1c2c3ad243)AI GRAPH
 # Principle of atomicity
 
 A task is defined as such if it can not be further subdivided to smaller tasks 
@@ -49,5 +49,7 @@ A mediator agent $A_{ij}$ is an agent that manages the relationship between two 
 ## Tool Pool 
 
 A set of api's tools adhering to the MCP protocol 
- 
+
+![image](https://github.com/user-attachments/assets/f000892f-54a6-4b51-b997-9b51303f3391)
+
 
