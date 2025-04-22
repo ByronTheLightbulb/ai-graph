@@ -1,4 +1,3 @@
-
 # Principle of atomicity
 
 A task is defined as such if it can not be further subdivided to smaller tasks 
@@ -21,7 +20,7 @@ Initially the user should be able to define a *Master Agent* that  :
 
 Every creation , deletion or edit of an *agent* performed by the *Master Agent* shall either further the atomisation of the graph or achieve a better performace with regards to the general task ,as measured by a <u>user-defined metric</u> .  
 
-# Atomic task : $t_{i}$
+## Atomic task : $t_{i}$
 
 An atomic task  $t_{i}$  is a task that can be performed by an agent , using the tools contained in the tool pool , adhering to the principle of atomicity
 
