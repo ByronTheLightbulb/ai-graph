@@ -1,4 +1,4 @@
-#AI GRAPH
+AI GRAPH
 # Principle of atomicity
 
 A task is defined as such if it can not be further subdivided to smaller tasks 
