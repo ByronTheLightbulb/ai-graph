@@ -58,7 +58,8 @@ Each action that is performed on an agent should create a new agent on the histo
 A set of api's tools adhering to the MCP protocol 
  
 
-![image](https://github.com/user-attachments/assets/3c967376-7ee6-44aa-a138-14f49371c16a)
+![image](https://github.com/user-attachments/assets/d26230b0-e7fd-4d4c-a708-40d158b495cb)
+
 
 
 
