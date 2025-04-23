@@ -1,6 +1,6 @@
 # Principle of atomicity
 
-A task is defined as such if it can not be further subdivided to smaller tasks 
+A task is defined as atomic if it can not be further subdivided to smaller tasks 
 
 # Atomisation 
 
@@ -26,7 +26,7 @@ An atomic task  $t_{i}$  is a task that can be performed by an agent , using the
 
 ## Atomic Agent : $A_{t_{i}}$
 
-An atomic agent $A_{t_{i}}$ is an agent that performs an atomic task $t_{i}$ using the tools contained in the tool pool . 
+An atomic agent $A_{t_{i}}$ is an agent that performs an atomic task $t_{i}$ using the tools contained in the tool pool and the outputs of other agents. 
 
 ### Input of an agent 
 $Inp(A_{{t_i}})$ :  Is the set of all the diffrent flows of information that the agent receiceves from tools or other agents .
@@ -44,10 +44,19 @@ A mediator agent $A_{ij}$ is an agent that manages the relationship between two 
 1. Changing the content of the input / output 
 2. Changing the skills and definition of each Agent 
 
- 
+## Dimensionality 
+
+Each connection on the ai-graph exist on a particular dimension $d_k$  . 
+For each atomic agent there must be at most one predeccessor and one successor .
+
+### $D_0$ : History dimension 
+
+Each action that is performed on an agent should create a new agent on the history dimension that succeeds the older agent and all the connections of the old agent shall be severed 
+
 ## Tool Pool 
 
 A set of api's tools adhering to the MCP protocol 
+ 
 
 ![image](https://github.com/user-attachments/assets/3c967376-7ee6-44aa-a138-14f49371c16a)
 
