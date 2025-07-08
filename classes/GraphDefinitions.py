@@ -1,6 +1,11 @@
+#TODO redo the whole thing
+
+
 import uuid 
 from pydantic import BaseModel
-from Agent import Agent 
+from pydantic_ai import Agent  
+from pydantic_ai.models.google import GoogleModel
+from pydantic_ai.providers.google import GoogleProvider
 from pprint import pprint
  
 class dimension(BaseModel) :
