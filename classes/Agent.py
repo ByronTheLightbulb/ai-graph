@@ -1,3 +1,3 @@
-class Agent :
-    def __init__(self) -> None:
-        pass
+from pydantic_ai import Agent  
+from utils.settings import API_KEY, MODEL
+ 
