@@ -34,4 +34,4 @@ class TaskAtomizer :
      
 if __name__=="__main__":
     TA = TaskAtomizer()
-    print(TA.run("I want to look at my financial transactions for possible improvements for my business"))
+    print(TA.run("I want to tell me 10 jokes and explain me to them and categorize them"))

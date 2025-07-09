@@ -1,6 +1,4 @@
 #TODO redo the whole thing
-
-
 import uuid 
 from pydantic import BaseModel
 from pydantic_ai import Agent  
