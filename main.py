@@ -1,10 +1,9 @@
 from classes.AgentProducer import AgentProducer
-from utils.JsonToModel import JsonToModel
 from pprint import pprint
 import json 
-
-task = "you are an agent that recieves a topic from the user and analysis it from all angles "
-generated_agent = AgentProducer().run(task)
-
-
-print(generated_agent.run_sync("tell me about gothic literature").output.model_dump_json())
+from classes.TaskAtomizer import TaskAtomizer
+TA = TaskAtomizer()
+atomised_tasks = TA.run("I want to look at my financial transactions for possible improvements for my business").tasks
+print(atomised_tasks)
+AP = AgentProducer()
+Agents = [AP.run(task,save=True) for task in atomised_tasks]
