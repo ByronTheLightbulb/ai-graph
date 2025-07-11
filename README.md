@@ -1,10 +1,10 @@
-# 🧠 Agent Decomposition Framework
+#  Agent Decomposition Framework
 
 This project is part of a modular agentic system designed to dynamically generate executable agent graphs from a single high-level user prompt. Its core functionality centers on automating the decomposition, structuring, and coordination of tasks via large language models (LLMs), allowing agents to be instantiated and orchestrated automatically based on a derived task graph.
 
 ---
 
-## 🧩 Components
+## Components
 
 ### TaskAtomizer
 
@@ -32,7 +32,7 @@ This enables construction of dynamic DAGs, which can be used to trigger agents c
 
 ---
 
-## 🔁 Example Pipeline
+## Example Pipeline
 
 1. **Decompose** the high-level prompt into atomic subtasks:
    - e.g., "Analyze telemetry data" → `["Load raw data", "Validate timestamps", "Aggregate by vehicle"]`

@@ -14,7 +14,7 @@ def create_mermaid_diagram(task_descriptions, dependencies, output_filename="mer
     mermaid_graph_lines = ["graph TD"]
 
     for i, desc in enumerate(task_descriptions):
-        mermaid_graph_lines.append(f'T{i}["{i}. {desc}"]')
+        mermaid_graph_lines.append(f'T{i}["{desc}"]')
 
     for node, deps in dependencies:
         for dep in deps:

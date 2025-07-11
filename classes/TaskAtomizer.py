@@ -6,6 +6,7 @@ from pydantic_ai.providers.google import GoogleProvider
 from utils.settings import API_KEY, MODEL,TASK_ATOMIZER_PROMPT
 from dataclasses import dataclass
 import logging
+
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 @dataclass
@@ -28,12 +29,10 @@ class TaskAtomizer :
         logging.info(f"Attempting to atomize task: '{task}'")
         try:
             self.generated_tasks=self.agent.run_sync(user_prompt=task).output
-            logging.info(f"Generated tasks: {self.generated_tasks.tasks}")
-            return self.generated_tasks
+            logging.info(f"Generated tasks")
+            return self.generated_tasks.tasks
         except Exception as e:
             logging.error(f"Error during task atomization: {e}")
             return TaskAtomizerOutput(tasks=[])  
                
-if __name__=="__main__":
-    TA = TaskAtomizer()
-    print(TA.run("I want to tell me 10 jokes and explain me to them and categorize them"))
+ 

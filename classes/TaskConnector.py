@@ -46,7 +46,7 @@ class TaskConnector :
                 user_prompt+=f"{i}.{tasks[i]}"
             
             self.generated_graph=self.agent.run_sync(user_prompt=user_prompt).output
-            logging.info(f"Generated connections: {self.generated_graph.tasks}")
+            logging.info(f"Generated connections" )
             return self.generated_graph.tasks
         except Exception as e:
             logging.error(f"Error during the connecting of tasks : {e}")
