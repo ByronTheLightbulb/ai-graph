@@ -1,65 +1,76 @@
-# Principle of atomicity
+## TaskAtomizer
 
-A task is defined as atomic if it can not be further subdivided to smaller tasks 
+`TaskAtomizer` is a lightweight wrapper around a `pydantic_ai.Agent` that transforms a high-level user instruction into a list of atomic subtasks using a Google LLM backend.
 
-# Atomisation 
+---
 
-Sometimes it is not possible to formulate the solution to a real-world problem using perfectly atomised task , therefore the proccess by which the state of an AI-graph changes as to include agents which perform only atomic tasks , shall be called atomisation of the Graph. 
+### Description
 
-# Basic entities 
+It takes a single input string (task description) and returns a structured output in the form of a list of subtasks (`list[str]`). It's designed to be integrated into larger agent-based workflows or orchestration pipelines.
 
-Each agentic entity may or may not contain inside it the graph-like structure defined here.  
+---
 
-## Master Agent : $A_{m}$ 
+### Code Overview
 
-Initially the user should be able to define a *Master Agent* that  :
+```python
+@dataclass
+class TaskAtomizerOutput:
+    tasks: list[str]
 
-1. Holds the information  in its context of the general task at hand
-2. Manages all the definitions of the *Atomic* and *Mediator* agents 
-3. Is responsible for the creation or deletion of agents 
+class TaskAtomizer:
+    def __init__(self):
+        self.id = uuid.uuid4()
+        self.provider = GoogleProvider(api_key=API_KEY)
+        self.model = GoogleModel(MODEL, provider=self.provider)
+        self.agent = Agent(
+            model=self.model,
+            instructions=TASK_ATOMIZER_PROMPT,
+            output_type=TaskAtomizerOutput
+        )
 
-Every creation , deletion or edit of an *agent* performed by the *Master Agent* shall either further the atomisation of the graph or achieve a better performace with regards to the general task ,as measured by a <u>user-defined metric</u> .  
+    def run(self, task: str) -> TaskAtomizerOutput:
+        return self.agent.run_sync(user_prompt=task).output
 
-## Atomic task : $t_{i}$
+## TaskConnector
 
-An atomic task  $t_{i}$  is a task that can be performed by an agent , using the tools contained in the tool pool , adhering to the principle of atomicity
+`TaskConnector` is an agent wrapper that infers task dependencies from a list of subtasks derived from a high-level task description. It uses a Google LLM via `pydantic_ai` to return a structured dependency graph.
 
-## Atomic Agent : $A_{t_{i}}$
+---
 
-An atomic agent $A_{t_{i}}$ is an agent that performs an atomic task $t_{i}$ using the tools contained in the tool pool and the outputs of other agents. 
+### Description
 
-### Input of an agent 
-$Inp(A_{{t_i}})$ :  Is the set of all the diffrent flows of information that the agent receiceves from tools or other agents .
-### Output of an agent 
-$Out(A_{{t_i}})$ :  Is the set of all the diffrent flows of information that the agent produces , each directed to a certain tool or agent  .
+Given:
+- A general task description (e.g., _"Process raw telemetry data"_), and
+- A list of subtasks (e.g., ["Validate records", "Filter nulls", "Order data by timestamp"]),
 
-### Codependence 
+the `TaskConnector` produces a list of `(task_id: str, dependency_ids: List[int])` pairs, which describe which tasks depend on which others.
 
-If for atomic agents $A_{{t_{i}}}$ and $A_{{t_j}}$  $Inp(A_{t_{j}}) \cap out(A_{t_{i}}) \neq \emptyset$  then they are called codependent.
+---
 
-## Mediator Agent : $A_{ij}$
+### Code Overview
 
-A mediator agent $A_{ij}$ is an agent that manages the relationship between two codependent atomic agents $A_{{t_{i}}}$ and $A_{{t_j}}$  by : 
+```python
+class TaskConnectorOutput(BaseModel):
+    tasks: List[Tuple[str, List[int]]]
 
-1. Changing the content of the input / output 
-2. Changing the skills and definition of each Agent 
+    def to_dict(self) -> Dict[str, List[int]]:
+        return dict(self.tasks)
 
-## Dimensionality 
+class TaskConnector:
+    def __init__(self):
+        self.id = uuid.uuid4()
+        self.provider = GoogleProvider(api_key=API_KEY)
+        self.model = GoogleModel(MODEL, provider=self.provider)
+        self.agent = Agent(
+            model=self.model,
+            instructions=TASK_CONNECTOR_PROMPT,
+            output_type=TaskConnectorOutput
+        )
 
-Each connection on the ai-graph exist on a particular dimension $d_k$  . 
-For each atomic agent there must be at most one predeccessor and one successor .
+    def run(self, initial_task: str, tasks: List[str]) -> List[Tuple[str, List[int]]]:
+        user_prompt = f"General Task :{initial_task}\nIndividual Tasks:\n"
+        for i, task in enumerate(tasks):
+            user_prompt += f"{i}.{task}\n"
 
-### $D_0$ : History dimension 
-
-Each action that is performed on an agent should create a new agent on the history dimension that succeeds the older agent and all the connections of the old agent shall be severed 
-
-## Tool Pool 
-
-A set of api's tools adhering to the MCP protocol 
- 
-
-![image](https://github.com/user-attachments/assets/d26230b0-e7fd-4d4c-a708-40d158b495cb)
-
-
-
+        return self.agent.run_sync(user_prompt=user_prompt).output.tasks
 
