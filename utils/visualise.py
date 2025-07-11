@@ -1,5 +1,3 @@
-# mermaid_generator.py
-
 def create_mermaid_diagram(task_descriptions, dependencies, output_filename="mermaid_diagram.html"):
     """
     Generates an HTML file containing a Mermaid diagram from task descriptions and dependencies.
@@ -132,41 +130,3 @@ def create_mermaid_diagram(task_descriptions, dependencies, output_filename="mer
         f.write(html_template)
 
     print(f"✅ Mermaid graph exported to '{output_filename}'. You can now open it in your browser.")
-
-if __name__ == "__main__":
-    # Example Usage (your original data):
-    task_descriptions = [
-        'Request user to provide their calendar data for the previous 10 days, specifying the required format (Event Title, Start Date and Time, End Date and Time, Description/Context).',
-        'Request user to provide any messages relevant to their upcoming schedule, tasks, deadlines, preferences, or commitments for the next 10 days, specifying the required format (Message Text, Date/Time Sent).',
-        'Upon receiving calendar data, parse the calendar data to extract individual events and their attributes (date, start time, end time, duration, title, description, recurrence).',
-        "Categorize parsed calendar events into predefined types (e.g., 'Work', 'Personal', 'Meetings', 'Travel').",
-        'Calculate the total time spent per day on each event category from the parsed calendar data.',
-        'Identify and list all recurring events or fixed commitments from the past 10 days of calendar data.',
-        'Identify and list all periods of available or free time slots from the past 10 days of calendar data.',
-        'Upon receiving message data, parse the message data to extract text content and timestamps.',
-        'Analyze message content to identify keywords, entities, and themes indicating tasks, deadlines, commitments, or preferences.',
-        'Extract specific actionable items or preferences from the identified relevant messages.',
-        'Prioritize the extracted actionable items from messages based on inferred urgency or importance.',
-        'Estimate the approximate time required for each extracted actionable item from messages.',
-        'Cross-reference identified recurring patterns and fixed commitments from calendar data with new actionable items from messages to detect potential conflicts or complementary activities.',
-        'Calculate the average daily workload based on the past 10 days of calendar data.',
-        'Identify peak activity hours and days from the past 10 days of calendar data.',
-        'Identify typical periods of lower activity or recurring free blocks from the past 10 days of calendar data.',
-        'Draft a preliminary 10-day schedule incorporating identified recurring calendar patterns and fixed commitments.',
-        'Integrate high-priority actionable items from messages into the preliminary 10-day schedule, finding suitable available time slots.',
-        'Adjust the preliminary 10-day schedule to accommodate all integrated actionable items, ensuring a balanced workload and avoiding significant overlaps.',
-        'Allocate buffer time slots within the 10-day plan to account for unforeseen delays or additional tasks.',
-        'Review the complete 10-day plan for feasibility, logical flow, and adherence to all identified constraints and preferences.',
-        'Finalize the 10-day plan, detailing specific activities and their assigned time slots for each day.',
-        'Present the finalized 10-day plan to the user in a clear, day-by-day format.',
-        'Request user feedback on the presented 10-day plan for any necessary adjustments or refinements.'
-    ]
-
-    dependencies = [
-        ('0', []), ('1', []), ('2', [0]), ('3', [2]), ('4', [3]), ('5', [2]), ('6', [2]), ('7', [1]),
-        ('8', [7]), ('9', [8]), ('10', [9]), ('11', [9]), ('12', [5, 9, 10, 11]), ('13', [2]),
-        ('14', [2]), ('15', [2]), ('16', [5, 6, 13, 14, 15]), ('17', [10, 11, 12, 16]), ('18', [17]),
-        ('19', [18]), ('20', [19, 4]), ('21', [20]), ('22', [21]), ('23', [22])
-    ]
-
-    create_mermaid_diagram(task_descriptions, dependencies)

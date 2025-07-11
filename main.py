@@ -3,16 +3,20 @@ from pprint import pprint
 import json 
 from classes.TaskAtomizer import TaskAtomizer
 from classes.TaskConnector import TaskConnector
+from utils.visualise import create_mermaid_diagram
+GENERAL_TASK ="i want proper outputs for "
 
-# TA = TaskAtomizer()
+TA = TaskAtomizer()
  
-# atomised_tasks = TA.run("Detect anomalies in my vehicle fleet's routes").tasks
-# for n in range(0,len(atomised_tasks)):
-#     print(f'{n+1}.{atomised_tasks[n]}')
-    
+ATOMISED_TASKS = TA.run(GENERAL_TASK).tasks
+ 
+# for n in range(0,len(ATOMISED_TASKS)):
+#     print(f'{n+1}.{ATOMISED_TASKS[n]}')
+print(ATOMISED_TASKS)
 TC = TaskConnector()
-res = TC.run(initial_task="Detect anomalies in my vehicle fleet's routes",tasks=['Define the required data points for each vehicle route record (e', 'Specify the data source for current vehicle route telemetry (e', 'Specify the time range for which route data should be collected (e', 'Initiate data collection of current vehicle route telemetry from the specified source for the defined time range', 'Validate that all collected route records contain the minimum required data points', 'Identify and flag route records with missing or null values for critical data points (e', 'Identify and flag route records with out-of-range values for numerical data points (e', 'Identify and flag route records with non-sequential or duplicate timestamps for a given Vehicle_ID', 'Remove or impute (if appropriate) flagged invalid route records', "Order collected route data by 'Vehicle_ID' then by 'Timestamp'", 'If no predefined routes exist, specify the data source for historical vehicle route telemetry to establish baselines', 'Collect historical vehicle route telemetry from the specified source (e', 'Clean and preprocess historical data using steps similar to current data (steps for validation, identification, flagging, removal/imputation, ordering)', "For each unique 'Vehicle_ID', cluster historical routes into typical patterns (e", "For each typical route pattern, calculate a 'normal' statistical profile (e", 'For each current vehicle route, create geographical segments between consecutive GPS points', "Calculate the 'Distance_Meters' for each segment", "Calculate the 'Time_Delta_Seconds' for each segment", "Calculate the 'Segment_Speed_KPH' for each segment (Distance / Time_Delta)", "Calculate the 'Heading_Change_Degrees' for each segment", "Identify 'Stop_Events' (e", "For each 'Stop_Event', record 'Stop_Duration_Seconds' and 'Stop_Location_Latitude', 'Stop_Location_Longitude'", "Determine 'Time_of_Day_Category' (e", "Determine 'Day_of_Week' for each record", "For each current route, match it against the most similar 'normal' historical route pattern or a pre-defined planned route", "For each segment of the current route, calculate the 'Cross_Track_Error_Meters' to the matched normal/planned route path", "Identify segments where 'Cross_Track_Error_Meters' exceeds a predefined 'Route_Deviation_Threshold_Meters' (e", "Aggregate consecutive deviating segments into 'Route_Deviation_Events'", "For each 'Route_Deviation_Event', record 'Vehicle_ID', 'Start_Timestamp', 'End_Timestamp', 'Start_Location', 'End_Location', 'Max_Deviation_Meters'", "For each segment, compare 'Segment_Speed_KPH' to the 'Expected_Speed_Range_KPH' for that specific road type/segment or historical average", "Identify segments where 'Segment_Speed_KPH' exceeds 'Max_Allowed_Speed_KPH' by 'Speed_Exceedance_Threshold_KPH' (e", "Identify segments where 'Segment_Speed_KPH' is below 'Min_Expected_Speed_KPH' by 'Speed_Under_Threshold_KPH' (e", "Aggregate consecutive speed-anomalous segments into 'Speed_Anomaly_Events'", "For each 'Speed_Anomaly_Event', record 'Vehicle_ID', 'Start_Timestamp', 'End_Timestamp', 'Start_Location', 'End_Location', 'Anomaly_Type' ('Too Fast', 'Too Slow'), 'Magnitude_KPH'", "For each 'Stop_Event' identified, check if the 'Stop_Location' is within a predefined 'Known_Stop_Point_Radius_Meters' of any known/planned stop points", "If a 'Stop_Event' is not near a 'Known_Stop_Point', flag it as an 'Unexpected_Stop_Anomaly'", "If a 'Stop_Event' is near a 'Known_Stop_Point' but its 'Stop_Duration_Seconds' exceeds 'Max_Allowed_Stop_Duration_Seconds' (e", "For each 'Stop_Anomaly', record 'Vehicle_ID', 'Stop_Timestamp', 'Stop_Location', 'Anomaly_Type' ('Unexpected Stop', 'Over-Duration Stop'), 'Actual_Duration_Seconds'", "For each complete current route, calculate its 'Total_Route_Duration_Seconds'", "Compare 'Total_Route_Duration_Seconds' against the 'Expected_Route_Duration_Seconds' for the matched normal/planned route pattern", "Identify routes where 'Total_Route_Duration_Seconds' deviates from 'Expected_Route_Duration_Seconds' by more than 'Route_Duration_Deviation_Percentage' (e", "Record 'Vehicle_ID', 'Route_Start_Timestamp', 'Route_End_Timestamp', 'Actual_Duration_Seconds', 'Expected_Duration_Seconds', 'Deviation_Percentage'", "Consolidate all detected 'Route_Deviation_Events', 'Speed_Anomaly_Events', 'Stop_Anomaly_Events', and 'Route_Duration_Anomalies'", "Prioritize anomalies based on a defined 'Severity_Score' (e", "Generate a structured list of all anomalies, including 'Anomaly_ID', 'Vehicle_ID', 'Anomaly_Type', 'Timestamp_of_Occurrence', 'Location_of_Occurrence', 'Description_of_Anomaly', 'Severity_Score'", 'Present the final list of detected anomalies to the user'])
-print(res)
-         
+DEPENDENCIES = TC.run(initial_task=GENERAL_TASK,tasks=ATOMISED_TASKS)
+ 
+
+create_mermaid_diagram(task_descriptions=ATOMISED_TASKS,dependencies=DEPENDENCIES)
 # AP = AgentProducer()
 # Agents = [AP.run(task,save=True) for task in atomised_tasks]

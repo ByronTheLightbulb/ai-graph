@@ -5,7 +5,7 @@ from pydantic_ai import Agent
 from pydantic_ai.models.google import GoogleModel
 from pydantic_ai.providers.google import GoogleProvider
 from utils.JsonToModel import JsonToModel # Assuming this is correctly implemented
-from utils.settings import API_KEY, MODEL
+from utils.settings import API_KEY, MODEL,AGENT_PRODUCER_PROMPT
 from dataclasses import dataclass
 from typing import Dict, Any
 from pydantic import BaseModel
@@ -35,14 +35,7 @@ class AgentProducer:
 
         self.agent = Agent(
             model=self.model,
-            instructions=(
-                "You are an expert AI agent that designs Pydantic BaseModel schemas. "
-                "I will give you a user task. Your job is to create a Pydantic BaseModel "
-                "as a **valid JSON schema** that describes the output of an AI agent "
-                "that performs that task. "
-                "Ensure the `output_model_json` field is a perfectly parsable JSON string. "
-                "It must represent a valid Pydantic model definition (e.g., with 'title', 'properties', 'type')."
-            ),
+            instructions=(  AGENT_PRODUCER_PROMPT),
             output_type=ProducerAgentOutput
         )
 
@@ -122,7 +115,4 @@ class AgentProducer:
         return self.generated_agent
 
     
-
-    def save(self):
-        # This method seems to be a placeholder
-        pass
+ 
