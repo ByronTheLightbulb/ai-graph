@@ -1,76 +1,55 @@
-## TaskAtomizer
+# 🧠 Agent Decomposition Framework
 
-`TaskAtomizer` is a lightweight wrapper around a `pydantic_ai.Agent` that transforms a high-level user instruction into a list of atomic subtasks using a Google LLM backend.
-
----
-
-### Description
-
-It takes a single input string (task description) and returns a structured output in the form of a list of subtasks (`list[str]`). It's designed to be integrated into larger agent-based workflows or orchestration pipelines.
+This project is part of a modular agentic system designed to dynamically generate executable agent graphs from a single high-level user prompt. Its core functionality centers on automating the decomposition, structuring, and coordination of tasks via large language models (LLMs), allowing agents to be instantiated and orchestrated automatically based on a derived task graph.
 
 ---
 
-### Code Overview
+## 🧩 Components
+
+### TaskAtomizer
+
+`TaskAtomizer` is responsible for decomposing a high-level instruction into a linear list of atomic subtasks. It uses a Google-backed LLM via the `pydantic_ai` agent interface.
+
+- **Input**: A single user instruction (string)
+- **Output**: A structured list of subtasks (`list[str]`)
+- **Use Case**: Preparing fine-grained steps for agent assignment or task routing
+
+This forms the first stage of the pipeline — transforming an abstract goal into discrete executable actions.
+
+---
+
+### TaskConnector
+
+`TaskConnector` infers logical and execution dependencies between subtasks, producing a task dependency graph.
+
+- **Input**:
+  - The general task description (string)
+  - A list of atomic subtasks (`list[str]`)
+- **Output**: A list of `(task_id: str, dependency_ids: List[int])` tuples representing a Directed Acyclic Graph (DAG)
+- **Use Case**: Planning execution order, scheduling, agent graph construction
+
+This enables construction of dynamic DAGs, which can be used to trigger agents conditionally based on completion of their prerequisite tasks.
+
+---
+
+## 🔁 Example Pipeline
+
+1. **Decompose** the high-level prompt into atomic subtasks:
+   - e.g., "Analyze telemetry data" → `["Load raw data", "Validate timestamps", "Aggregate by vehicle"]`
+
+2. **Connect** those subtasks into a dependency structure:
+   - Output: `[("0", []), ("1", [0]), ("2", [1])]`
+
+3. **Generate** a task DAG and instantiate agents for each atomic node based on the graph topology.
+
+---
+
+## ⚙️ Configuration
+
+Define the following settings in `utils/settings.py` or as environment variables:
 
 ```python
-@dataclass
-class TaskAtomizerOutput:
-    tasks: list[str]
-
-class TaskAtomizer:
-    def __init__(self):
-        self.id = uuid.uuid4()
-        self.provider = GoogleProvider(api_key=API_KEY)
-        self.model = GoogleModel(MODEL, provider=self.provider)
-        self.agent = Agent(
-            model=self.model,
-            instructions=TASK_ATOMIZER_PROMPT,
-            output_type=TaskAtomizerOutput
-        )
-
-    def run(self, task: str) -> TaskAtomizerOutput:
-        return self.agent.run_sync(user_prompt=task).output
-
-## TaskConnector
-
-`TaskConnector` is an agent wrapper that infers task dependencies from a list of subtasks derived from a high-level task description. It uses a Google LLM via `pydantic_ai` to return a structured dependency graph.
-
----
-
-### Description
-
-Given:
-- A general task description (e.g., _"Process raw telemetry data"_), and
-- A list of subtasks (e.g., ["Validate records", "Filter nulls", "Order data by timestamp"]),
-
-the `TaskConnector` produces a list of `(task_id: str, dependency_ids: List[int])` pairs, which describe which tasks depend on which others.
-
----
-
-### Code Overview
-
-```python
-class TaskConnectorOutput(BaseModel):
-    tasks: List[Tuple[str, List[int]]]
-
-    def to_dict(self) -> Dict[str, List[int]]:
-        return dict(self.tasks)
-
-class TaskConnector:
-    def __init__(self):
-        self.id = uuid.uuid4()
-        self.provider = GoogleProvider(api_key=API_KEY)
-        self.model = GoogleModel(MODEL, provider=self.provider)
-        self.agent = Agent(
-            model=self.model,
-            instructions=TASK_CONNECTOR_PROMPT,
-            output_type=TaskConnectorOutput
-        )
-
-    def run(self, initial_task: str, tasks: List[str]) -> List[Tuple[str, List[int]]]:
-        user_prompt = f"General Task :{initial_task}\nIndividual Tasks:\n"
-        for i, task in enumerate(tasks):
-            user_prompt += f"{i}.{task}\n"
-
-        return self.agent.run_sync(user_prompt=user_prompt).output.tasks
-
+API_KEY = "your-google-api-key"
+MODEL = "models/gemini-1.5-pro"
+TASK_ATOMIZER_PROMPT = "...system prompt for task decomposition..."
+TASK_CONNECTOR_PROMPT = "...system prompt for dependency inference..."
