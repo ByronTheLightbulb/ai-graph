@@ -51,5 +51,4 @@ Define the following settings in `utils/settings.py` or as environment variables
 ```python
 API_KEY = "your-google-api-key"
 MODEL = "models/gemini-1.5-pro"
-TASK_ATOMIZER_PROMPT = "...system prompt for task decomposition..."
-TASK_CONNECTOR_PROMPT = "...system prompt for dependency inference..."
+
