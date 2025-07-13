@@ -1,54 +1,69 @@
-#  Agent Decomposition Framework
+# AI-Graph
 
-This project is part of a modular agentic system designed to dynamically generate executable agent graphs from a single high-level user prompt. Its core functionality centers on automating the decomposition, structuring, and coordination of tasks via large language models (LLMs), allowing agents to be instantiated and orchestrated automatically based on a derived task graph.
+AI-Graph is a powerful tool designed to break down high-level tasks into atomic sub-tasks, orchestrate their execution using specialized AI agents, and visualize the resulting execution plan. It provides a structured approach to complex problem-solving by leveraging AI capabilities to generate efficient and manageable workflows.
 
----
+## Features
 
-## Components
+-   **Task Atomization**: Automatically decomposes complex, high-level tasks into smaller, atomic, and manageable sub-tasks.
+-   **AI Agent Orchestration**: Generates a detailed execution plan, assigning specific AI agents to handle each atomic task.
+-   **Multiple Output Formats**: Saves the generated execution plan in various formats, including JSON and Pickle, for easy integration and further processing.
+-   **Visual Task Dependencies**: Creates an interactive Mermaid diagram (HTML) that visually represents the dependencies between atomic tasks, providing a clear overview of the workflow.
 
-### TaskAtomizer
+## Installation
 
-`TaskAtomizer` is responsible for decomposing a high-level instruction into a linear list of atomic subtasks. It uses a Google-backed LLM via the `pydantic_ai` agent interface.
+1.  **Clone the repository**:
 
-- **Input**: A single user instruction (string)
-- **Output**: A structured list of subtasks (`list[str]`)
-- **Use Case**: Preparing fine-grained steps for agent assignment or task routing
+    ```bash
+    git clone https://github.com/ByronTheLightbulb/ai-graph.git
+    cd ai-graph
+    ```
 
-This forms the first stage of the pipeline — transforming an abstract goal into discrete executable actions.
+2.  **Install Dependencies**:
 
----
+    This project requires Python 3.x. Install the necessary dependencies using pip:
 
-### TaskConnector
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-`TaskConnector` infers logical and execution dependencies between subtasks, producing a task dependency graph.
+## Usage
 
-- **Input**:
-  - The general task description (string)
-  - A list of atomic subtasks (`list[str]`)
-- **Output**: A list of `(task_id: str, dependency_ids: List[int])` tuples representing a Directed Acyclic Graph (DAG)
-- **Use Case**: Planning execution order, scheduling, agent graph construction
+To run AI-Graph, execute the `main.py` script with your desired task and output options.
 
-This enables construction of dynamic DAGs, which can be used to trigger agents conditionally based on completion of their prerequisite tasks.
+```bash
+python main.py --task "Your high-level task description here" \
+               --output-json "output.json" \
+               --output-pickle "output.pkl" \
+               --output-diagram "mermaid_diagram.html"
+```
 
----
+**Example**:
 
-## Example Pipeline
+```bash
+python main.py --task "Find me suspicious transaction in my company's transaction history for the previous month" \
+               --output-json "transaction_analysis.json" \
+               --output-pickle "transaction_analysis.pkl" \
+               --output-diagram "transaction_flow.html"
+```
 
-1. **Decompose** the high-level prompt into atomic subtasks:
-   - e.g., "Analyze telemetry data" → `["Load raw data", "Validate timestamps", "Aggregate by vehicle"]`
+### Command-line Arguments:
 
-2. **Connect** those subtasks into a dependency structure:
-   - Output: `[("0", []), ("1", [0]), ("2", [1])]`
+-   `--task` (str, required): The high-level task to be accomplished. Enclose in quotes if it contains spaces.
+-   `--output-json` (str, optional): The path to save the generated execution plan in JSON format. Defaults to `output.json`.
+-   `--output-pickle` (str, optional): The path to save the generated execution plan in Pickle format. Defaults to `output.pkl`.
+-   `--output-diagram` (str, optional): The path to save the Mermaid diagram HTML file. Defaults to `mermaid_diagram.html`.
 
-3. **Generate** a task DAG and instantiate agents for each atomic node based on the graph topology.
+## Project Structure
 
----
+-   `main.py`: The main entry point of the application, orchestrating the task processing and output generation.
+-   `classes/`: Contains core classes like `AtomicGenerator`, `AgentProducer`, `TaskAtomizer`, and `TaskConnector` that define the AI agent logic and task processing.
+-   `prompts/`: Stores various prompt templates used by the AI agents for task understanding and generation.
+-   `utils/`: Provides utility functions, including JSON serialization (`JsonToModel`), task sequencing (`sequencer`), settings management (`settings`), and visualization tools (`visualise`).
 
-## ⚙️ Configuration
+## Contributing
 
-Define the following settings in `utils/settings.py` or as environment variables:
+Contributions are welcome! Please feel free to submit pull requests or open issues for bugs and feature requests.
 
-```python
-API_KEY = "your-google-api-key"
-MODEL = "models/gemini-1.5-pro"
+## License
 
+[Specify your license here, e.g., MIT License, Apache 2.0 License, etc.]

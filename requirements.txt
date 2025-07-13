@@ -1,0 +1,4 @@
+pydantic
+pydantic-ai
+json-schema-to-pydantic
+python-dotenv
