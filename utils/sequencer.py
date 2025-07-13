@@ -1,12 +1,16 @@
 import collections
+import logging 
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-class sequencer:
+class TaskSequencer:
     def __init__(self, inp) -> None:
         # Convert keys to int and ensure all values are sets of ints
-        self.deps = {int(k): set(v) for k, v in inp["deps"]}
-
+        try:
+            self.deps = {int(k): set(v) for k, v in inp}
+        except Exception as e : 
+            logging.error(f'error at init :{e}')
     def generate_sequence(self) -> list[int]:
-        temp_deps = {k: set(v) for k, v in self.deps.items()}
+        temp_deps = {int(k): set(v) for k, v in self.deps.items()}
         res = []
 
         # Calculate in-degrees for all nodes

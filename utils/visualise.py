@@ -1,24 +1,38 @@
-def create_mermaid_diagram(task_descriptions, dependencies, output_filename="mermaid_diagram.html"):
+from typing import List, Tuple
+import logging
+
+def generate_mermaid_diagram(
+    task_descriptions: List[str],
+    dependencies: List[Tuple[int, List[int]]],
+    output_filename: str = "mermaid_diagram.html"
+):
     """
-    Generates an HTML file containing a Mermaid diagram from task descriptions and dependencies.
-    This version includes enhanced styling for better readability of large node labels and
-    improved zoomability/interactivity, with a significantly increased maxTextSize.
+    Generates an HTML file containing a Mermaid.js diagram of task dependencies.
+
+    This function creates a visual representation of a task graph, making it easy to understand
+    the relationships and execution flow. The diagram is interactive, allowing for zooming and panning.
 
     Args:
-        task_descriptions (list): A list of strings, where each string is the description of a task.
-        dependencies (list): A list of tuples, where each tuple represents a dependency
-                              (e.g., ('target_task_index', [dependent_task_index1, ...])).
-        output_filename (str): The name of the HTML file to be generated.
+        task_descriptions (List[str]): A list of descriptions for each task.
+        dependencies (List[Tuple[int, List[int]]]): A list of tuples representing dependencies,
+                                                     e.g., [(1, [0])].
+        output_filename (str): The name of the output HTML file.
     """
+    logging.basicConfig(level=logging.INFO)
+    logging.info(f"Generating Mermaid diagram and saving to '{output_filename}'.")
 
-    mermaid_graph_lines = ["graph TD"]
+    mermaid_graph_lines = ["graph TD"]  # TD = Top to Down
 
+    # Add nodes to the graph
     for i, desc in enumerate(task_descriptions):
-        mermaid_graph_lines.append(f'T{i}["{desc}"]')
+        # Sanitize description for Mermaid syntax
+                safe_desc = desc.replace('"', '&quot;')
+                mermaid_graph_lines.append(f'    T{i}["{safe_desc}"]')
 
+    # Add edges (dependencies) to the graph
     for node, deps in dependencies:
         for dep in deps:
-            mermaid_graph_lines.append(f"T{dep} --> T{node}")
+            mermaid_graph_lines.append(f"    T{dep} --> T{node}")
 
     mermaid_code = "\n".join(mermaid_graph_lines)
 
@@ -130,3 +144,33 @@ def create_mermaid_diagram(task_descriptions, dependencies, output_filename="mer
         f.write(html_template)
 
     print(f"✅ Mermaid graph exported to '{output_filename}'. You can now open it in your browser.")
+
+if __name__ == "__main__":
+    # Example Usage
+    tasks = [
+        "Understand the user's request for a new feature",
+        "Create a detailed technical specification",
+        "Develop the backend API endpoints",
+        "Design the user interface and user experience",
+        "Implement the frontend components",
+        "Integrate frontend with backend",
+        "Write unit and integration tests",
+        "Deploy the feature to the staging environment",
+        "Perform final QA and testing",
+        "Release the feature to production"
+    ]
+
+    # Dependencies: (Task Index, [List of tasks it depends on])
+    deps = [
+        (1, [0]),
+        (2, [1]),
+        (3, [1]),
+        (4, [3]),
+        (5, [2, 4]),
+        (6, [5]),
+        (7, [6]),
+        (8, [7]),
+        (9, [8])
+    ]
+
+    generate_mermaid_diagram(tasks, deps, "feature_development_flow.html")
